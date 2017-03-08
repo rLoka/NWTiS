@@ -11,12 +11,14 @@ import java.util.Properties;
  *
  * @author grupa_3
  */
-public abstract class KonfiguracijaApstraktna implements Konfiguracija {
+public class KonfiguracijaApstraktna implements Konfiguracija {
 
-    String datoteka;
-    Properties postavke;
+    protected String datoteka;
+    protected Properties postavke;
 
     public KonfiguracijaApstraktna(String datoteka) {
+        this.datoteka = datoteka;
+        this.postavke = new Properties();
     }
 
     @Override
@@ -121,18 +123,41 @@ public abstract class KonfiguracijaApstraktna implements Konfiguracija {
         Konfiguracija konfiguracija;
         
         if(datoteka.toLowerCase().endsWith(".txt")){
-            konfiguracija = null;
+            konfiguracija = new KonfiguracijaTxt(datoteka);
         }
-        else if(datoteka.toLowerCase().endsWith(".txt")){
-            konfiguracija = null;
+        else if(datoteka.toLowerCase().endsWith(".xml")){
+            konfiguracija = new KonfiguracijaTxt(datoteka);
         }
         else{
-            konfiguracija = null;
+            konfiguracija = new KonfiguracijaTxt(datoteka);
         }
+        
+        konfiguracija.spremiKonfiguraciju();
         
         return konfiguracija;
     }
     //; - kreira praznu konfiguraciju na bazi ekstenzije datoteke. Ako datoteka ima ekstenziju .xml onda se koristi klasa KonfiguracijaXML, ako je .txt onda je KonfiguracijaTxt, inače KonfiguracijaBin. Metoda se kasnije implementira do kraja (nakon što se završe podklase).  Ako ne postoji datoteka izbacuje se iznimka NemaKonfiguracije, ako nije poznata konfiguracija izbacuje se iznimka NeispravnaKonfiguracija.
-    //public static Konfiguracija preuzmiKonfiguraciju(String datoteka) throws NemaKonfiguracije, NeispravnaKonfiguracija{}// - vraća konfiguraciju na bazi ekstenzije datoteke. Ako datoteka ima ekstenziju .xml onda se koristi klasa KonfiguracijaXML, inače KonfiguracijaTxt. Metoda se kasnije implementira do kraja (nakon što se završe podklase). Ako ne postoji datoteka izbacuje se iznimka NemaKonfiguracije, ako nije poznata konfiguracija izbacuje se iznimka NeispravnaKonfiguracija.
+    public static Konfiguracija preuzmiKonfiguraciju(String datoteka) throws NemaKonfiguracije, NeispravnaKonfiguracija{
+        if(datoteka == null || datoteka.length() == 0){
+            throw new NeispravnaKonfiguracija("Naziv neispravan!");
+        }
+        
+        Konfiguracija konfiguracija;
+        
+        if(datoteka.toLowerCase().endsWith(".txt")){
+            konfiguracija = new KonfiguracijaTxt(datoteka);
+        }
+        else if(datoteka.toLowerCase().endsWith(".xml")){
+            konfiguracija = new KonfiguracijaTxt(datoteka);
+        }
+        else{
+            konfiguracija = new KonfiguracijaTxt(datoteka);
+        }
+        
+        konfiguracija.ucitajKonfiguraciju();
+        
+        return konfiguracija;
+    }
+    // - vraća konfiguraciju na bazi ekstenzije datoteke. Ako datoteka ima ekstenziju .xml onda se koristi klasa KonfiguracijaXML, inače KonfiguracijaTxt. Metoda se kasnije implementira do kraja (nakon što se završe podklase). Ako ne postoji datoteka izbacuje se iznimka NemaKonfiguracije, ako nije poznata konfiguracija izbacuje se iznimka NeispravnaKonfiguracija.
 
 }
